@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.selenium;
+package org.springframework.roo.addon.web.senchatouch;
 
 import static org.springframework.roo.model.JavaType.LONG_OBJECT;
 import static org.springframework.roo.model.JdkJavaType.BIG_DECIMAL;
@@ -54,17 +54,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
- * Implementation of {@link SeleniumOperations}.
+ * Implementation of {@link SenchaTouchOperations}.
  * 
  * @author Stefan Schmidt
  * @since 1.0
  */
 @Component
 @Service
-public class SeleniumOperationsImpl implements SeleniumOperations {
+public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     private static final Logger LOGGER = HandlerUtils
-            .getLogger(SeleniumOperationsImpl.class);
+            .getLogger(SenchaTouchOperationsImpl.class);
 
     @Reference private FileManager fileManager;
     @Reference private MemberDetailsScanner memberDetailsScanner;
@@ -203,7 +203,7 @@ public class SeleniumOperationsImpl implements SeleniumOperations {
      * @param controller the JavaType of the controller under test (required)
      * @param name the name of the test case (optional)
      */
-    public void generateTest(final JavaType controller, String name,
+    public void generateSenchaTouchCode(final JavaType controller, String name,
             String serverURL) {
         Validate.notNull(controller, "Controller type required");
 
@@ -225,34 +225,36 @@ public class SeleniumOperationsImpl implements SeleniumOperations {
                 "Web controller '%s' does not appear to be an automatic, scaffolded controller",
                 controller.getFullyQualifiedTypeName());
 
-        // We abort the creation of a selenium test if the controller does not
+        // We abort the creation of a senchatouch code if the controller does not
         // allow the creation of new instances for the form backing object
         if (!webScaffoldMetadata.getAnnotationValues().isCreate()) {
-            LOGGER.warning("The controller you specified does not allow the creation of new instances of the form backing object. No Selenium tests created.");
+            LOGGER.warning("The controller you specified does not allow the creation of new instances of the form backing object. No Sencha Touch code created.");
             return;
         }
 
         if (!serverURL.endsWith("/")) {
-            serverURL = serverURL + "/";
+            serverURL = serverURL + "/";   // Here I may want to add app name to the end.
         }
 
         final JavaType formBackingType = webScaffoldMetadata
                 .getAnnotationValues().getFormBackingObject();
-        final String relativeTestFilePath = "selenium/test-"
+        final String relativeTestFilePath = "senchatouch/test-"
                 + formBackingType.getSimpleTypeName().toLowerCase() + ".xhtml";
-        final String seleniumPath = pathResolver.getFocusedIdentifier(
+        // TODO : Add here SenchaTOuch Controller, View, Model, Store everything.
+        final String senchaTouchPath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeTestFilePath);
 
         final InputStream templateInputStream = FileUtils.getInputStream(
-                getClass(), "selenium-template.xhtml");
+                getClass(), "senchatouch-template.xhtml");
         Validate.notNull(templateInputStream,
-                "Could not acquire selenium.xhtml template");
+                "Could not acquire senchatouch.xhtml template");
+
         final Document document = XmlUtils.readXml(templateInputStream);
 
         final Element root = (Element) document.getLastChild();
         if (root == null || !"html".equals(root.getNodeName())) {
             throw new IllegalArgumentException(
-                    "Could not parse selenium test case template file!");
+                    "Could not parse senchatouch test case template file!");
         }
 
         name = name != null ? name : "Selenium test for "
@@ -322,37 +324,16 @@ public class SeleniumOperationsImpl implements SeleniumOperations {
             }
         }
 
-        fileManager.createOrUpdateTextFileIfRequired(seleniumPath,
+        fileManager.createOrUpdateTextFileIfRequired(senchaTouchPath,
                 XmlUtils.nodeToString(document), false);
 
-        manageTestSuite(relativeTestFilePath, name, serverURL);
+        //manageTestSuite(relativeTestFilePath, name, serverURL);
 
-        // Install selenium-maven-plugin
-        installMavenPlugin();
     }
 
-    private void installMavenPlugin() {
-        // Stop if the plugin is already installed
-        for (final Plugin plugin : projectOperations.getFocusedModule()
-                .getBuildPlugins()) {
-            if (plugin.getArtifactId().equals("selenium-maven-plugin")) {
-                return;
-            }
-        }
 
-        final Element configuration = XmlUtils.getConfiguration(getClass());
-        final Element plugin = XmlUtils.findFirstElement(
-                "/configuration/selenium/plugin", configuration);
 
-        // Now install the plugin itself
-        if (plugin != null) {
-            projectOperations.addBuildPlugin(
-                    projectOperations.getFocusedModuleName(),
-                    new Plugin(plugin));
-        }
-    }
-
-    public boolean isSeleniumInstallationPossible() {
+    public boolean isSenchaTouchInstallationPossible() {
         return projectOperations.isFocusedProjectAvailable()
                 && projectOperations.isFeatureInstalled(FeatureNames.MVC);
     }
@@ -361,9 +342,10 @@ public class SeleniumOperationsImpl implements SeleniumOperations {
         return typeLocationService.isInProject(javaType);
     }
 
+    /*
     private void manageTestSuite(final String testPath, final String name,
             final String serverURL) {
-        final String relativeTestFilePath = "selenium/test-suite.xhtml";
+        final String relativeTestFilePath = "senchatouch/test-suite.xhtml";
         final String seleniumPath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeTestFilePath);
 
@@ -373,9 +355,9 @@ public class SeleniumOperationsImpl implements SeleniumOperations {
         }
         else {
             inputStream = FileUtils.getInputStream(getClass(),
-                    "selenium-test-suite-template.xhtml");
+                    "senchatouch-test-suite-template.xhtml");
             Validate.notNull(inputStream,
-                    "Could not acquire selenium test suite template");
+                    "Could not acquire senchatouch test suite template");
         }
 
         final Document suite = XmlUtils.readXml(inputStream);
@@ -409,7 +391,7 @@ public class SeleniumOperationsImpl implements SeleniumOperations {
                 "/resources/" + relativeTestFilePath, "si_",
                 pathResolver.getFocusedPath(Path.SRC_MAIN_WEBAPP));
     }
-
+*/
     private Node openCommand(final Document document, final String linkTarget) {
         final Node tr = document.createElement("tr");
 

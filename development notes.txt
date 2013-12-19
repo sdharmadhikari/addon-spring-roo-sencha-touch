@@ -1,0 +1,9 @@
+roo> selenium test --controller ~.web.EmployeeController --name MyEmployeeTest 
+Updated SRC_MAIN_WEBAPP/WEB-INF/i18n/application.properties
+Created SRC_MAIN_WEBAPP/selenium
+Created SRC_MAIN_WEBAPP/selenium/test-employee.xhtml
+Created SRC_MAIN_WEBAPP/selenium/test-suite.xhtml
+Updated SRC_MAIN_WEBAPP/WEB-INF/views/menu.jspx
+Updated ROOT/pom.xml [added plugin org.codehaus.mojo:selenium-maven-plugin:2.3]
+
+

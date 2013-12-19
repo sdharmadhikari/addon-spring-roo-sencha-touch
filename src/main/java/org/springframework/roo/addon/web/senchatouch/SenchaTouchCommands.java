@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.selenium;
+package org.springframework.roo.addon.web.senchatouch;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -10,18 +10,18 @@ import org.springframework.roo.shell.CliOption;
 import org.springframework.roo.shell.CommandMarker;
 
 /**
- * Commands for the 'selenium' add-on to be used by the ROO shell.
+ * Commands for the 'senchatouch' add-on to be used by the ROO shell.
  * 
  * @author Stefan Schmidt
  * @since 1.0
  */
 @Component
 @Service
-public class SeleniumCommands implements CommandMarker {
+public class SenchaTouchCommands implements CommandMarker {
 
-    @Reference private SeleniumOperations seleniumOperations;
+    @Reference private SenchaTouchOperations senchaTouchOperations;
 
-    @CliCommand(value = "selenium test", help = "Creates a new Selenium test for a particular controller")
+    @CliCommand(value = "senchatouch generate", help = "Creates a new Sencha Touch based app for a particular controller")
     public void generateTest(
             @CliOption(key = "controller", mandatory = true, help = "Controller to create a Selenium test for") final JavaType controller,
             @CliOption(key = "name", mandatory = false, help = "Name of the test") final String name,
@@ -30,8 +30,8 @@ public class SeleniumCommands implements CommandMarker {
         seleniumOperations.generateTest(controller, name, url);
     }
 
-    @CliAvailabilityIndicator({ "selenium test" })
+    @CliAvailabilityIndicator({ "senchatouch generate" })
     public boolean isJdkFieldManagementAvailable() {
-        return seleniumOperations.isSeleniumInstallationPossible();
+        return senchaTouchOperations.isSenchaTouchInstallationPossible();
     }
 }

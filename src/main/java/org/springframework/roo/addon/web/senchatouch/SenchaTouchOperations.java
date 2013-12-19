@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.selenium;
+package org.springframework.roo.addon.web.senchatouch;
 
 import org.springframework.roo.model.JavaType;
 
@@ -8,7 +8,7 @@ import org.springframework.roo.model.JavaType;
  * @author Ben Alex
  * @since 1.0
  */
-public interface SeleniumOperations {
+public interface SenchaTouchOperations {
 
     /**
      * Creates a new Selenium testcase
@@ -17,7 +17,7 @@ public interface SeleniumOperations {
      * @param name the name of the test case (optional)
      * @param serverURL the URL of the Selenium server (optional)
      */
-    void generateTest(JavaType controller, String name, String serverURL);
+    void generateSenchaTouchCode(JavaType controller, String name, String serverURL);
 
-    boolean isSeleniumInstallationPossible();
+    boolean isSenchaTouchInstallationPossible();
 }
