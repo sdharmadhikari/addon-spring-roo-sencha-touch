@@ -9,4 +9,4 @@ This addon will read Spring Roo generated entities and it's attributes and will 
 Sencha TOuch developer can take the code further to add app specific functionality.
 
 The Sencha Touch Reference project is at https://github.com/sdharmadhikari/roo-addon-reference-sencha-project.
-This is reference for code generation. 
+Sencha Touch code from this project will be used as code templates.
