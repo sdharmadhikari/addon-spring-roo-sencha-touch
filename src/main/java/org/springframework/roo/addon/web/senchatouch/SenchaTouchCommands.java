@@ -27,7 +27,7 @@ public class SenchaTouchCommands implements CommandMarker {
             @CliOption(key = "name", mandatory = false, help = "Name of the test") final String name,
             @CliOption(key = "serverUrl", mandatory = false, unspecifiedDefaultValue = "http://localhost:8080/", specifiedDefaultValue = "http://localhost:8080/", help = "URL of the server where the web application is available, including protocol, port and hostname") final String url) {
 
-        seleniumOperations.generateTest(controller, name, url);
+        senchaTouchOperations.generateSenchaTouchCode(controller, name, url);
     }
 
     @CliAvailabilityIndicator({ "senchatouch generate" })
