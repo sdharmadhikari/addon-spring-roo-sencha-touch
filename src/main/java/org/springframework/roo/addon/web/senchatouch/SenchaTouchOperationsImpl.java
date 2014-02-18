@@ -205,6 +205,9 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
      */
     public void generateSenchaTouchCode(final JavaType controller, String name,
             String serverURL) {
+
+
+
         Validate.notNull(controller, "Controller type required");
 
         final ClassOrInterfaceTypeDetails controllerTypeDetails = typeLocationService
@@ -213,6 +216,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 controllerTypeDetails,
                 "Class or interface type details for type '%s' could not be resolved",
                 controller);
+
 
         final LogicalPath path = PhysicalTypeIdentifier
                 .getPath(controllerTypeDetails.getDeclaredByMetadataId());
@@ -224,6 +228,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 webScaffoldMetadata,
                 "Web controller '%s' does not appear to be an automatic, scaffolded controller",
                 controller.getFullyQualifiedTypeName());
+
 
         // We abort the creation of a senchatouch code if the controller does not
         // allow the creation of new instances for the form backing object
@@ -238,12 +243,17 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         final JavaType formBackingType = webScaffoldMetadata
                 .getAnnotationValues().getFormBackingObject();
-        final String relativeTestFilePath = "senchatouch/test-"
-                + formBackingType.getSimpleTypeName().toLowerCase() + ".xhtml";
+        final String relativeControllerTestFilePath = "senchatouch/test-"
+                + formBackingType.getSimpleTypeName().toLowerCase() + ".js";
+        System.out.println("relativeControllerTestFilePath : " + relativeControllerTestFilePath);
+
+
         // TODO : Add here SenchaTOuch Controller, View, Model, Store everything.
         final String senchaTouchPath = pathResolver.getFocusedIdentifier(
-                Path.SRC_MAIN_WEBAPP, relativeTestFilePath);
-
+                Path.SRC_MAIN_WEBAPP, relativeControllerTestFilePath);
+        System.out.println("relativeControllerTestFilePath : " + senchaTouchPath);
+        System.out.println("Ended addon-roo-sencha successfully..");
+        /*
         final InputStream templateInputStream = FileUtils.getInputStream(
                 getClass(), "senchatouch-template.xhtml");
         Validate.notNull(templateInputStream,
@@ -328,6 +338,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 XmlUtils.nodeToString(document), false);
 
         //manageTestSuite(relativeTestFilePath, name, serverURL);
+        */
 
     }
 
