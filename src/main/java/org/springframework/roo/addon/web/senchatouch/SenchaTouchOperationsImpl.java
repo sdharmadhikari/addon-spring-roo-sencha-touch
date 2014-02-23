@@ -7,14 +7,12 @@ import static org.springframework.roo.model.Jsr303JavaType.MIN;
 import static org.springframework.roo.model.Jsr303JavaType.PAST;
 import static org.springframework.roo.model.SpringJavaType.DATE_TIME_FORMAT;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
@@ -52,6 +50,11 @@ import org.springframework.roo.support.util.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import java.io.StringWriter;
+import java.util.Properties;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 
 /**
  * Implementation of {@link SenchaTouchOperations}.
@@ -252,6 +255,27 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         final String senchaTouchPath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeControllerTestFilePath);
         System.out.println("relativeControllerTestFilePath : " + senchaTouchPath);
+
+        System.out.println("Enabling velocity..");
+        Properties properties = new Properties();
+        try {
+            properties.load( getClass().getClassLoader().getResourceAsStream( "velocity.properties" ) );
+        } catch (IOException e) {
+            System.out.println("Velocity properties not found !!");
+        }
+        System.out.println("Enabled velocity..");
+        VelocityEngine velocityEngine = null;
+        // Create and initialize the template engine
+        try{
+            velocityEngine = new VelocityEngine( properties );
+        }catch(Exception e){
+            System.out.println("Velocity engine initiation problem");
+           e.printStackTrace();
+        }
+        System.out.println("Trying to run velocity..");
+        velocityExecute(velocityEngine) ;
+        System.out.println("Ran velocity..");
+
         System.out.println("Ended addon-roo-sencha successfully..");
         /*
         final InputStream templateInputStream = FileUtils.getInputStream(
@@ -452,4 +476,54 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         return tr;
     }
+
+    public static void main(String[] args){
+
+
+        Properties properties = new Properties();
+        try {
+            properties.load( SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream( "velocity.properties" ) );
+        } catch (IOException e) {
+            System.out.println("Velocity properties not found !!");
+        }
+
+        VelocityEngine velocityEngine = null;
+        // Create and initialize the template engine
+        try{
+            velocityEngine = new VelocityEngine( properties );
+        }catch(Exception e){
+            System.out.println("Velocity engine initiation problem");
+            e.printStackTrace();
+        }
+
+        System.out.println(velocityExecute(velocityEngine));
+
+    }
+
+    public static String velocityExecute(VelocityEngine velocityEngine)
+    {
+
+        try
+        {
+            // Build our model
+            HelloBean helloBean = new HelloBean( "Velocity" );
+
+            // Build a context to hold the model
+            VelocityContext velocityContext = new VelocityContext();
+            velocityContext.put( "hello", helloBean );
+
+            // Execute the template
+            StringWriter writer = new StringWriter();
+            velocityEngine.mergeTemplate( "hello.vm", "utf-8", velocityContext, writer );
+
+            // Return the result
+            return writer.toString();
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
