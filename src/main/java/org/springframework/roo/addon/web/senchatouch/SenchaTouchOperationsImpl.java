@@ -514,7 +514,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
             // Execute the template
             StringWriter writer = new StringWriter();
-            velocityEngine.mergeTemplate( "hello.vm", "utf-8", velocityContext, writer );
+            velocityEngine.mergeTemplate( "templates/index.html.vsl", "utf-8", velocityContext, writer );
 
             // Return the result
             return writer.toString();
