@@ -22,6 +22,8 @@ import org.apache.felix.scr.annotations.Service;
 import org.springframework.roo.addon.web.mvc.controller.details.WebMetadataService;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.WebScaffoldMetadata;
 import org.springframework.roo.addon.web.mvc.jsp.menu.MenuOperations;
+import org.springframework.roo.addon.web.senchatouch.beans.AppBean;
+import org.springframework.roo.addon.web.senchatouch.beans.EntityBean;
 import org.springframework.roo.classpath.PhysicalTypeIdentifier;
 import org.springframework.roo.classpath.TypeLocationService;
 import org.springframework.roo.classpath.details.ClassOrInterfaceTypeDetails;
@@ -53,6 +55,7 @@ import org.w3c.dom.Node;
 
 import java.io.StringWriter;
 import java.util.Properties;
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
@@ -506,18 +509,21 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         try
         {
             // Build our model
-            HelloBean helloBean = new HelloBean( "Velocity" );
+            EntityBean entityBean = new EntityBean( "Employee" );
+            AppBean appBean = new AppBean("SenchaCrud");
 
             // Build a context to hold the model
             VelocityContext velocityContext = new VelocityContext();
-            velocityContext.put( "hello", helloBean );
+            velocityContext.put("app", appBean);
+            velocityContext.put( "entity", entityBean );
+            
 
             // Execute the template
             StringWriter writer = new StringWriter();
-            velocityEngine.mergeTemplate( "templates/index.html.vsl", "utf-8", velocityContext, writer );
-
-            // Return the result
+            velocityEngine.mergeTemplate( "templates/app/view/MainView.js", "utf-8", velocityContext, writer );
             return writer.toString();
+            
+            
         }
         catch( Exception e )
         {
