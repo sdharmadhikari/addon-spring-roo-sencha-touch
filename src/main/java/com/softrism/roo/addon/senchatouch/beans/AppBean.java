@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.senchatouch.beans;
+package com.softrism.roo.addon.senchatouch.beans;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,19 +7,18 @@ package org.springframework.roo.addon.web.senchatouch.beans;
  * Time: 1:02 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EntityBean
+public class AppBean
 {
     private String name;
-    private String plural;
+    private String baseUrl;
 
-    public EntityBean()
+    public AppBean()
     {
     }
 
-    public EntityBean(String name)
+    public AppBean(String name)
     {
         this.name = name;
-        this.plural = name + "s";
     }
 
 	public String getName() {
@@ -30,12 +29,12 @@ public class EntityBean
 		this.name = name;
 	}
 
-	public String getPlural() {
-		return plural;
+	public String getBaseUrl() {
+		return baseUrl;
 	}
 
-	public void setPlural(String plural) {
-		this.plural = plural;
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
     
     

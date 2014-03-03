@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.senchatouch;
+package com.softrism.roo.addon.senchatouch;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;

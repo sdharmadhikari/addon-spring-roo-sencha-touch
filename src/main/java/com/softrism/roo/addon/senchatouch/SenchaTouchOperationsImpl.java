@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.senchatouch;
+package com.softrism.roo.addon.senchatouch;
 
 import static org.springframework.roo.model.JavaType.LONG_OBJECT;
 import static org.springframework.roo.model.JdkJavaType.BIG_DECIMAL;
@@ -22,8 +22,6 @@ import org.apache.felix.scr.annotations.Service;
 import org.springframework.roo.addon.web.mvc.controller.details.WebMetadataService;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.WebScaffoldMetadata;
 import org.springframework.roo.addon.web.mvc.jsp.menu.MenuOperations;
-import org.springframework.roo.addon.web.senchatouch.beans.AppBean;
-import org.springframework.roo.addon.web.senchatouch.beans.EntityBean;
 import org.springframework.roo.classpath.PhysicalTypeIdentifier;
 import org.springframework.roo.classpath.TypeLocationService;
 import org.springframework.roo.classpath.details.ClassOrInterfaceTypeDetails;
@@ -58,6 +56,10 @@ import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+
+import com.softrism.roo.addon.senchatouch.beans.AppBean;
+import com.softrism.roo.addon.senchatouch.beans.EntityBean;
+
 
 /**
  * Implementation of {@link SenchaTouchOperations}.
@@ -260,6 +262,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         System.out.println("relativeControllerTestFilePath : " + senchaTouchPath);
 
         System.out.println("Enabling velocity..");
+        /*
         Properties properties = new Properties();
         try {
             properties.load( getClass().getClassLoader().getResourceAsStream( "velocity.properties" ) );
@@ -278,6 +281,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         System.out.println("Trying to run velocity..");
         velocityExecute(velocityEngine) ;
         System.out.println("Ran velocity..");
+        */
 
         System.out.println("Ended addon-roo-sencha successfully..");
         /*

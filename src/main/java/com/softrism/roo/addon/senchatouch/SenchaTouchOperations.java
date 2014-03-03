@@ -1,4 +1,4 @@
-package org.springframework.roo.addon.web.senchatouch;
+package com.softrism.roo.addon.senchatouch;
 
 import org.springframework.roo.model.JavaType;
 
