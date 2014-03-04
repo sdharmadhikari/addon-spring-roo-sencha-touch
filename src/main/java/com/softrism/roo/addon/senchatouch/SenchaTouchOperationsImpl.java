@@ -7,14 +7,15 @@ import static org.springframework.roo.model.Jsr303JavaType.MIN;
 import static org.springframework.roo.model.Jsr303JavaType.PAST;
 import static org.springframework.roo.model.SpringJavaType.DATE_TIME_FORMAT;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
+import com.softrism.roo.addon.senchatouch.velocity.ExtendedVelocityEngine;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -51,7 +52,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.io.StringWriter;
 import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
@@ -262,7 +262,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         System.out.println("relativeControllerTestFilePath : " + senchaTouchPath);
 
         System.out.println("Enabling velocity..");
-        /*
+
         Properties properties = new Properties();
         try {
             properties.load( getClass().getClassLoader().getResourceAsStream( "velocity.properties" ) );
@@ -278,10 +278,11 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
             System.out.println("Velocity engine initiation problem");
            e.printStackTrace();
         }
+
         System.out.println("Trying to run velocity..");
-        velocityExecute(velocityEngine) ;
+        System.out.println(velocityExecute(velocityEngine)) ;
         System.out.println("Ran velocity..");
-        */
+
 
         System.out.println("Ended addon-roo-sencha successfully..");
         /*
@@ -503,11 +504,11 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
             e.printStackTrace();
         }
 
-        System.out.println(velocityExecute(velocityEngine));
+        //System.out.println(velocityExecute(velocityEngine));
 
     }
 
-    public static String velocityExecute(VelocityEngine velocityEngine)
+    public String velocityExecute(VelocityEngine velocityEngine)
     {
 
         try
@@ -524,7 +525,14 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
             // Execute the template
             StringWriter writer = new StringWriter();
-            velocityEngine.mergeTemplate( "templates/app/view/MainView.js", "utf-8", velocityContext, writer );
+            //velocityEngine.mergeTemplate("templates/app/view/MainView.js", "utf-8", velocityContext, writer);
+
+            InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream( "templates/app/view/MainView.js" );
+
+            String inputString = IOUtils.toString(is, "UTF-8");
+
+            velocityEngine.evaluate( velocityContext, writer, "test-log", inputString );
+            //evaluate( Context context, Writer writer, String logTag, InputStream instream )
             return writer.toString();
             
             
