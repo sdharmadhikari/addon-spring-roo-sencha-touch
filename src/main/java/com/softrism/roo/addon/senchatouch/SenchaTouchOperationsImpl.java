@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import com.softrism.roo.addon.senchatouch.velocity.VelocityEnabler;
+import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.felix.scr.annotations.Component;
@@ -105,11 +106,30 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
             String parsedString = velocityEnabler.velocityExecute("templates/app/view/MainView.js", appBean, entityBean);
             System.out.println(parsedString);
         }
+        /*
+        try {
+            System.out.println("trying..");
+            FileInputStream templatesRoot = (FileInputStream)SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream("templates"));
+            for(String file : files){
+                System.out.println(file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        */
+        InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream("common-templates.list");
 
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String fileName;
+        try {
+            while((fileName = br.readLine()) != null){
+                System.out.println(fileName);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
-
-
-        System.out.println("Ended addon-roo-sencha successfully..");
+        System.out.println("Ended addon-roo-sencha successfully!..");
         /*
         final InputStream templateInputStream = FileUtils.getInputStream(
                 getClass(), "senchatouch-template.xhtml");
