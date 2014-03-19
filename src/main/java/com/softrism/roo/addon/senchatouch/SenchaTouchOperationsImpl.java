@@ -44,6 +44,7 @@ import org.springframework.roo.project.Path;
 import org.springframework.roo.project.PathResolver;
 import org.springframework.roo.project.ProjectOperations;
 import org.springframework.roo.support.logging.HandlerUtils;
+import org.springframework.roo.support.util.FileUtils;
 import org.springframework.roo.support.util.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -80,7 +81,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
     @Reference private TypeLocationService typeLocationService;
     @Reference private WebMetadataService webMetadataService;
 
-
+    private String TEMPLATE_ROOT = "templates/";
     /**
      * Creates Sencha Touch code.
      * 
@@ -101,22 +102,6 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         ArrayList<String> allEntities = getAllValidEntities(controller);
 
-        for(String entityName : allEntities) {
-            EntityBean entityBean = new EntityBean( entityName);
-            String parsedString = velocityEnabler.velocityExecute("templates/app/view/MainView.js", appBean, entityBean);
-            System.out.println(parsedString);
-        }
-        /*
-        try {
-            System.out.println("trying..");
-            FileInputStream templatesRoot = (FileInputStream)SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream("templates"));
-            for(String file : files){
-                System.out.println(file);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        */
         InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream("common-templates.list");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -124,18 +109,28 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         try {
             while((fileName = br.readLine()) != null){
                 System.out.println(fileName);
+                String templateFile = TEMPLATE_ROOT + fileName;
+                //final InputStream templateInputStream = FileUtils.getInputStream(
+                       // getClass(), templateFile);
+                //Validate.notNull(templateInputStream,
+                //        "Could not acquire " + templateFile+ " template");
+
+                for(String entityName : allEntities) {
+                    EntityBean entityBean = new EntityBean( entityName);
+                    String parsedString = velocityEnabler.velocityExecute(templateFile, appBean, entityBean);
+                    System.out.println(parsedString);
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         System.out.println("Ended addon-roo-sencha successfully!..");
-        /*
-        final InputStream templateInputStream = FileUtils.getInputStream(
-                getClass(), "senchatouch-template.xhtml");
-        Validate.notNull(templateInputStream,
-                "Could not acquire senchatouch.xhtml template");
 
+
+
+        /*
         final Document document = XmlUtils.readXml(templateInputStream);
 
         final Element root = (Element) document.getLastChild();

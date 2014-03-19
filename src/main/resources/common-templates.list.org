@@ -1,0 +1,8 @@
+app/controller/EmployeeController.js
+app/model/Employee.js
+app/store/EmployeeJsonPStore.js
+app/view/EmployeeFormPanel.js
+app/view/EmployeeList.js
+app/view/EmployeeNavigationView.js
+app/view/Main.js
+app/view/MainView.js
