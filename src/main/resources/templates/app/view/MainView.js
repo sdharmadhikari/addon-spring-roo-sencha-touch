@@ -1,10 +1,10 @@
 
 
-Ext.define('{$app.name}.view.MainView', {
+Ext.define('${app.name}.view.MainView', {
     extend: 'Ext.tab.Panel',
 
     requires: [
-        '{$app.name}.view.{$entity.name}NavigationView',
+        '${app.name}.view.${entity.name}NavigationView',
         'Ext.navigation.View',
         'Ext.tab.Bar'
     ],
@@ -20,7 +20,7 @@ Ext.define('{$app.name}.view.MainView', {
                 layout: 'fit',
                 items: [
                     {
-                        xtype: '$entity.nameNavigationView'
+                        xtype: '${entity.name}NavigationView'
                     }
                 ]
             }
