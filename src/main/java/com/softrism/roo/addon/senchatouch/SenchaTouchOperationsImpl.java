@@ -128,45 +128,26 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         System.out.println("Ended addon-roo-sencha successfully!..");
 
-
-
-        /*
-        final Document document = XmlUtils.readXml(templateInputStream);
-
-        final Element root = (Element) document.getLastChild();
-        if (root == null || !"html".equals(root.getNodeName())) {
-            throw new IllegalArgumentException(
-                    "Could not parse senchatouch test case template file!");
-        }
-
-        name = name != null ? name : "Selenium test for "
-                + controller.getSimpleTypeName();
-        XmlUtils.findRequiredElement("/html/head/title", root).setTextContent(
-                name);
-
-        XmlUtils.findRequiredElement("/html/body/table/thead/tr/td", root)
-                .setTextContent(name);
-
-        final Element tbody = XmlUtils.findRequiredElement(
-                "/html/body/table/tbody", root);
-        tbody.appendChild(openCommand(
-                document,
-                serverURL
-                        + projectOperations.getProjectName(projectOperations
-                                .getFocusedModuleName()) + "/"
-                        + webScaffoldMetadata.getAnnotationValues().getPath()
-                        + "?form"));
-
-        final ClassOrInterfaceTypeDetails formBackingTypeDetails = typeLocationService
-                .getTypeDetails(formBackingType);
-        Validate.notNull(
-                formBackingType,
-                "Class or interface type details for type '%s' could not be resolved",
-                formBackingType);
-        final MemberDetails memberDetails = memberDetailsScanner
-                .getMemberDetails(getClass().getName(), formBackingTypeDetails);
+        //controller.getSimpleTypeName();
+        //
+        //        serverURL
+        //                + projectOperations.getProjectName(projectOperations
+        //                        .getFocusedModuleName()) + "/"
+        //                + webScaffoldMetadata.getAnnotationValues().getPath()
+        //                + "?form"));
+        //
+        //final ClassOrInterfaceTypeDetails formBackingTypeDetails = typeLocationService
+        //        .getTypeDetails(formBackingType);
+        //Validate.notNull(
+        //        formBackingType,
+        //        "Class or interface type details for type '%s' could not be resolved",
+        //        formBackingType);
+        //final MemberDetails memberDetails = memberDetailsScanner
+        //        .getMemberDetails(getClass().getName(), formBackingTypeDetails);
 
         // Add composite PK identifier fields if needed
+
+        /*     Getting all fields
         for (final FieldMetadata field : persistenceMemberLocator
                 .getEmbeddedIdentifierFields(formBackingType)) {
             final JavaType fieldType = field.getFieldType();
@@ -180,7 +161,8 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 tbody.appendChild(typeCommand(document, fieldBuilder.build()));
             }
         }
-
+        */
+        /*
         // Add all other fields
         final List<FieldMetadata> fields = webMetadataService
                 .getScaffoldEligibleFieldMetadata(formBackingType,
@@ -192,10 +174,10 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 tbody.appendChild(typeCommand(document, field));
             }
         }
-
-        tbody.appendChild(clickAndWaitCommand(document,
-                "//input[@id = 'proceed']"));
-
+        */
+        //tbody.appendChild(clickAndWaitCommand(document,
+        //        "//input[@id = 'proceed']"));
+        /*
         // Add verifications for all other fields
         for (final FieldMetadata field : fields) {
             final JavaType fieldType = field.getFieldType();
@@ -205,12 +187,13 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                         field));
             }
         }
-
+        */
+        /*
         fileManager.createOrUpdateTextFileIfRequired(senchaTouchPath,
                 XmlUtils.nodeToString(document), false);
-
-        //manageTestSuite(relativeTestFilePath, name, serverURL);
         */
+        //manageTestSuite(relativeTestFilePath, name, serverURL);
+
 
     }
 
@@ -277,21 +260,6 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
     }
 
 
-    private Node clickAndWaitCommand(final Document document,
-                                     final String linkTarget) {
-        final Node tr = document.createElement("tr");
-
-        final Node td1 = tr.appendChild(document.createElement("td"));
-        td1.setTextContent("clickAndWait");
-
-        final Node td2 = tr.appendChild(document.createElement("td"));
-        td2.setTextContent(linkTarget);
-
-        final Node td3 = tr.appendChild(document.createElement("td"));
-        td3.setTextContent(" ");
-
-        return tr;
-    }
 
     private String convertToInitializer(final FieldMetadata field) {
         String initializer = " ";
@@ -448,36 +416,8 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 pathResolver.getFocusedPath(Path.SRC_MAIN_WEBAPP));
     }
 */
-    private Node openCommand(final Document document, final String linkTarget) {
-        final Node tr = document.createElement("tr");
 
-        final Node td1 = tr.appendChild(document.createElement("td"));
-        td1.setTextContent("open");
 
-        final Node td2 = tr.appendChild(document.createElement("td"));
-        td2.setTextContent(linkTarget + (linkTarget.contains("?") ? "&" : "?")
-                + "lang=" + Locale.getDefault());
-
-        final Node td3 = tr.appendChild(document.createElement("td"));
-        td3.setTextContent(" ");
-
-        return tr;
-    }
-
-    private Node typeCommand(final Document document, final FieldMetadata field) {
-        final Node tr = document.createElement("tr");
-
-        final Node td1 = tr.appendChild(document.createElement("td"));
-        td1.setTextContent("type");
-
-        final Node td2 = tr.appendChild(document.createElement("td"));
-        td2.setTextContent("_" + field.getFieldName().getSymbolName() + "_id");
-
-        final Node td3 = tr.appendChild(document.createElement("td"));
-        td3.setTextContent(convertToInitializer(field));
-
-        return tr;
-    }
 
     private Node verifyTextCommand(final Document document,
             final JavaType formBackingType, final FieldMetadata field) {
@@ -497,29 +437,5 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         return tr;
     }
-
-    public static void main(String[] args){
-
-
-        Properties properties = new Properties();
-        try {
-            properties.load( SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream( "velocity.properties" ) );
-        } catch (IOException e) {
-            System.out.println("Velocity properties not found !!");
-        }
-
-        VelocityEngine velocityEngine = null;
-        // Create and initialize the template engine
-        try{
-            velocityEngine = new VelocityEngine( properties );
-        }catch(Exception e){
-            System.out.println("Velocity engine initiation problem");
-            e.printStackTrace();
-        }
-
-        //System.out.println(velocityExecute(velocityEngine));
-
-    }
-
 
 }
