@@ -118,7 +118,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 for(String entityName : allEntities) {
                     EntityBean entityBean = new EntityBean( entityName);
                     String parsedString = velocityEnabler.velocityExecute(templateFile, appBean, entityBean);
-                    System.out.println(parsedString);
+                    createEntityJsFile(entityName, fileName, parsedString);
                 }
 
             }
@@ -197,7 +197,20 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     }
 
+    public boolean createEntityJsFile(String entityName, String templateName, String fileContent ) {
+        final String relativeFilePath = "" + templateName;
 
+        System.out.println("relativeControllerTestFilePath : " + relativeFilePath);
+
+        final String finalFilePath = pathResolver.getFocusedIdentifier(
+                Path.SRC_MAIN_WEBAPP, relativeFilePath);
+        System.out.println("relativeControllerTestFilePath : " + finalFilePath);
+
+        fileManager.createOrUpdateTextFileIfRequired(finalFilePath,
+               fileContent , false);
+
+        return true;
+    }
 
     public boolean isSenchaTouchInstallationPossible() {
         return projectOperations.isFocusedProjectAvailable()
@@ -238,16 +251,6 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         final JavaType formBackingType = webScaffoldMetadata
                 .getAnnotationValues().getFormBackingObject();
-        final String relativeControllerTestFilePath = "senchatouch/test-"
-                + formBackingType.getSimpleTypeName().toLowerCase() + ".js";
-        System.out.println("relativeControllerTestFilePath : " + relativeControllerTestFilePath);
-
-
-        // TODO : Add here SenchaTOuch Controller, View, Model, Store everything.
-        final String senchaTouchPath = pathResolver.getFocusedIdentifier(
-                Path.SRC_MAIN_WEBAPP, relativeControllerTestFilePath);
-        System.out.println("relativeControllerTestFilePath : " + senchaTouchPath);
-
 
         ArrayList<String> allEntityNames = new ArrayList<String>();
         String entityName = formBackingType.getSimpleTypeName();
