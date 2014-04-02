@@ -1,4 +1,4 @@
-Ext.define('SenchaCrud.view.Main', {
+Ext.define('${app.name}.view.Main', {
     extend: 'Ext.tab.Panel',
     xtype: 'main',
     requires: [

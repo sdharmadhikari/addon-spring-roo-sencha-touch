@@ -1,1 +1,10 @@
+index.html
+app.js
+app/controller/EntityController.js
+app/model/Entity.js
+app/store/EntityJsonPStore.js
+app/view/EntityFormPanel.js
+app/view/EntityList.js
+app/view/EntityNavigationView.js
+app/view/Main.js
 app/view/MainView.js

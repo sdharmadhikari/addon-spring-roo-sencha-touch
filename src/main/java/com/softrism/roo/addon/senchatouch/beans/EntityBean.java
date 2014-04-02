@@ -10,7 +10,6 @@ package com.softrism.roo.addon.senchatouch.beans;
 public class EntityBean
 {
     private String name;
-    private String plural;
 
     public EntityBean()
     {
@@ -19,7 +18,6 @@ public class EntityBean
     public EntityBean(String name)
     {
         this.name = name;
-        this.plural = name + "s";
     }
 
 	public String getName() {
@@ -30,13 +28,13 @@ public class EntityBean
 		this.name = name;
 	}
 
-	public String getPlural() {
-		return plural;
-	}
+    public String getLowerCase() {
+        return name.toLowerCase();
+    }
 
-	public void setPlural(String plural) {
-		this.plural = plural;
-	}
+
+
+
     
     
 

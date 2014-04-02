@@ -82,6 +82,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
     @Reference private WebMetadataService webMetadataService;
 
     private String TEMPLATE_ROOT = "templates/";
+    private String SENCHA_APP_BASE =  "phone/";
     /**
      * Creates Sencha Touch code.
      * 
@@ -198,9 +199,9 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
     }
 
     public boolean createEntityJsFile(String entityName, String templateName, String fileContent ) {
-        final String relativeFilePath = "" + templateName;
+        String relativeFilePath = SENCHA_APP_BASE + templateName;
 
-        System.out.println("relativeControllerTestFilePath : " + relativeFilePath);
+        relativeFilePath = relativeFilePath.replaceAll("Entity", entityName);
 
         final String finalFilePath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeFilePath);
