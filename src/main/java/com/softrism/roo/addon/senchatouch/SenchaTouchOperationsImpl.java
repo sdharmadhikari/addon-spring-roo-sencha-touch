@@ -99,7 +99,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         VelocityEnabler velocityEnabler = new VelocityEnabler();
 
-        AppBean appBean = new AppBean("SenchaCrud");
+        AppBean appBean = new AppBean("seleroo");
 
         ArrayList<String> allEntities = getAllValidEntities(controller);
 

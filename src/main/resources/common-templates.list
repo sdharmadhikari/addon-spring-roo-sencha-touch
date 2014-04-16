@@ -8,3 +8,7 @@ app/view/EntityList.js
 app/view/EntityNavigationView.js
 app/view/Main.js
 app/view/MainView.js
+theme/android-mountainview.css
+theme/ios-cupertino.css
+theme/sencha-touch-default.css
+theme/windows-phone-theme.css
