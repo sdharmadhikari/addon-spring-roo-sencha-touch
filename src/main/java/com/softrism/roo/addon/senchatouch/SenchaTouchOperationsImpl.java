@@ -5,6 +5,7 @@ import static org.springframework.roo.model.JdkJavaType.BIG_DECIMAL;
 import static org.springframework.roo.model.Jsr303JavaType.FUTURE;
 import static org.springframework.roo.model.Jsr303JavaType.MIN;
 import static org.springframework.roo.model.Jsr303JavaType.PAST;
+import static org.springframework.roo.model.RooJavaType.ROO_WEB_SCAFFOLD;
 import static org.springframework.roo.model.SpringJavaType.DATE_TIME_FORMAT;
 
 import java.io.*;
@@ -220,42 +221,39 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     public ArrayList<String> getAllValidEntities(final JavaType controller) { // Currently only one controller, later no arguments because all controllers.
 
+        ArrayList<String> allEntityNames = new ArrayList<String>();
         Validate.notNull(controller, "Controller type required");
 
-        final ClassOrInterfaceTypeDetails controllerTypeDetails = typeLocationService
-                .getTypeDetails(controller);
-        Validate.notNull(
+        /*Validate.notNull(
                 controllerTypeDetails,
                 "Class or interface type details for type '%s' could not be resolved",
                 controller);
+        */
+        for (final JavaType type : typeLocationService
+                .findTypesWithAnnotation(ROO_WEB_SCAFFOLD)) {
+            System.out.println(type.getFullyQualifiedTypeName());
+            ClassOrInterfaceTypeDetails controllerTypeDetails = typeLocationService
+                    .getTypeDetails(type);
+            LogicalPath path = PhysicalTypeIdentifier
+                    .getPath(controllerTypeDetails.getDeclaredByMetadataId());
+            String webScaffoldMetadataIdentifier = WebScaffoldMetadata
+                    .createIdentifier(type, path);
+            WebScaffoldMetadata webScaffoldMetadata = (WebScaffoldMetadata) metadataService
+                    .get(webScaffoldMetadataIdentifier);
+            Validate.notNull(
+                    webScaffoldMetadata,
+                    "Web controller '%s' does not appear to be an automatic, scaffolded controller",
+                    type.getFullyQualifiedTypeName());
+            if (!webScaffoldMetadata.getAnnotationValues().isCreate()) {
+                LOGGER.warning("The controller you specified does not allow the creation of new instances of the form backing object. No Sencha Touch code created.");
+                return null;
+            }
+            JavaType formBackingType = webScaffoldMetadata
+                    .getAnnotationValues().getFormBackingObject();
+            String entityName = formBackingType.getSimpleTypeName();
+            allEntityNames.add(entityName);
 
-
-        final LogicalPath path = PhysicalTypeIdentifier
-                .getPath(controllerTypeDetails.getDeclaredByMetadataId());
-        final String webScaffoldMetadataIdentifier = WebScaffoldMetadata
-                .createIdentifier(controller, path);
-        final WebScaffoldMetadata webScaffoldMetadata = (WebScaffoldMetadata) metadataService
-                .get(webScaffoldMetadataIdentifier);
-        Validate.notNull(
-                webScaffoldMetadata,
-                "Web controller '%s' does not appear to be an automatic, scaffolded controller",
-                controller.getFullyQualifiedTypeName());
-
-
-        // We abort the creation of a senchatouch code if the controller does not
-        // allow the creation of new instances for the form backing object
-        if (!webScaffoldMetadata.getAnnotationValues().isCreate()) {
-            LOGGER.warning("The controller you specified does not allow the creation of new instances of the form backing object. No Sencha Touch code created.");
-            return null;
         }
-
-
-        final JavaType formBackingType = webScaffoldMetadata
-                .getAnnotationValues().getFormBackingObject();
-
-        ArrayList<String> allEntityNames = new ArrayList<String>();
-        String entityName = formBackingType.getSimpleTypeName();
-        allEntityNames.add(entityName);
         return allEntityNames;
     }
 
