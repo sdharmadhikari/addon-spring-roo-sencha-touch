@@ -21,13 +21,11 @@ public class SenchaTouchCommands implements CommandMarker {
 
     @Reference private SenchaTouchOperations senchaTouchOperations;
 
-    @CliCommand(value = "senchatouch generate", help = "Creates a new Sencha Touch based app for a particular controller")
+    @CliCommand(value = "senchatouch generate app", help = "Creates a new Sencha Touch based app for the roo app")
     public void generateSenchaCode(
-            @CliOption(key = "controller", mandatory = true, help = "Controller to create Sencha Touch code for") final JavaType controller,
-            @CliOption(key = "name", mandatory = false, help = "Name of the sencha touch file(dummy parameter)") final String name,
             @CliOption(key = "serverUrl", mandatory = false, unspecifiedDefaultValue = "http://localhost:8080/", specifiedDefaultValue = "http://localhost:8080/", help = "URL of the server where the server web application is available, including protocol, port and hostname") final String url) {
 
-        senchaTouchOperations.generateSenchaTouchCode(controller, name, url);
+        senchaTouchOperations.generateSenchaTouchCode( url);
     }
 
     @CliAvailabilityIndicator({ "senchatouch generate" })
