@@ -29,11 +29,13 @@ import org.springframework.roo.classpath.PhysicalTypeIdentifier;
 import org.springframework.roo.classpath.TypeLocationService;
 import org.springframework.roo.classpath.details.ClassOrInterfaceTypeDetails;
 import org.springframework.roo.classpath.details.FieldMetadata;
+import org.springframework.roo.classpath.details.FieldMetadataBuilder;
 import org.springframework.roo.classpath.details.MemberFindingUtils;
 import org.springframework.roo.classpath.details.annotations.AnnotationAttributeValue;
 import org.springframework.roo.classpath.details.annotations.AnnotationMetadata;
 import org.springframework.roo.classpath.operations.DateTime;
 import org.springframework.roo.classpath.persistence.PersistenceMemberLocator;
+import org.springframework.roo.classpath.scanner.MemberDetails;
 import org.springframework.roo.classpath.scanner.MemberDetailsScanner;
 import org.springframework.roo.metadata.MetadataService;
 import org.springframework.roo.model.JavaSymbolName;
@@ -84,38 +86,45 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     private String TEMPLATE_ROOT = "templates/";
     private String SENCHA_APP_BASE =  "phone/";
+    private String COMMON_TEMPLATEST_LIST = "common-templates.list";
+    private String JAVA2JS_MAPPING_FILE =  "java2js-mapping.properties";
+
+    HashMap<String,String> java2JsMapping;
     /**
      * Creates Sencha Touch code.
      * 
      * @param controller the JavaType of the controller under test (required)
      * @param name the name of the test case (optional)
      */
-    public void generateSenchaTouchCode(final JavaType controller, String name,
-            String serverURL) {
+    public void generateSenchaTouchCode(String serverURL) {
 
         if (!serverURL.endsWith("/")) {
             serverURL = serverURL + "/";   // Here I may want to add app name to the end.
         }
 
+        Properties properties = new Properties();
+        try {
+            properties.load(SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream(JAVA2JS_MAPPING_FILE));
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        java2JsMapping= new HashMap<String, String>((Map) properties);
 
         VelocityEnabler velocityEnabler = new VelocityEnabler();
 
         AppBean appBean = new AppBean("seleroo");
 
-        ArrayList<String> allEntities = getAllValidEntities(controller);
+        ArrayList<String> allEntities = getAllValidEntities();
 
-        InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream("common-templates.list");
+        InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream(COMMON_TEMPLATEST_LIST);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String fileName;
         try {
             while((fileName = br.readLine()) != null){
-                System.out.println(fileName);
+
                 String templateFile = TEMPLATE_ROOT + fileName;
-                //final InputStream templateInputStream = FileUtils.getInputStream(
-                       // getClass(), templateFile);
-                //Validate.notNull(templateInputStream,
-                //        "Could not acquire " + templateFile+ " template");
 
                 for(String entityName : allEntities) {
                     EntityBean entityBean = new EntityBean( entityName);
@@ -128,74 +137,10 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        String url =  serverURL + projectOperations.getProjectName(projectOperations.getFocusedModuleName()) ;
+        System.out.println("url::::::::::::::" + url);
+
         System.out.println("Ended addon-roo-sencha successfully!..");
-
-        //controller.getSimpleTypeName();
-        //
-        //        serverURL
-        //                + projectOperations.getProjectName(projectOperations
-        //                        .getFocusedModuleName()) + "/"
-        //                + webScaffoldMetadata.getAnnotationValues().getPath()
-        //                + "?form"));
-        //
-        //final ClassOrInterfaceTypeDetails formBackingTypeDetails = typeLocationService
-        //        .getTypeDetails(formBackingType);
-        //Validate.notNull(
-        //        formBackingType,
-        //        "Class or interface type details for type '%s' could not be resolved",
-        //        formBackingType);
-        //final MemberDetails memberDetails = memberDetailsScanner
-        //        .getMemberDetails(getClass().getName(), formBackingTypeDetails);
-
-        // Add composite PK identifier fields if needed
-
-        /*     Getting all fields
-        for (final FieldMetadata field : persistenceMemberLocator
-                .getEmbeddedIdentifierFields(formBackingType)) {
-            final JavaType fieldType = field.getFieldType();
-            if (!fieldType.isCommonCollectionType()
-                    && !isSpecialType(fieldType)) {
-                final FieldMetadataBuilder fieldBuilder = new FieldMetadataBuilder(
-                        field);
-                final String fieldName = field.getFieldName().getSymbolName();
-                fieldBuilder.setFieldName(new JavaSymbolName(fieldName + "."
-                        + fieldName));
-                tbody.appendChild(typeCommand(document, fieldBuilder.build()));
-            }
-        }
-        */
-        /*
-        // Add all other fields
-        final List<FieldMetadata> fields = webMetadataService
-                .getScaffoldEligibleFieldMetadata(formBackingType,
-                        memberDetails, null);
-        for (final FieldMetadata field : fields) {
-            final JavaType fieldType = field.getFieldType();
-            if (!fieldType.isCommonCollectionType()
-                    && !isSpecialType(fieldType)) {
-                tbody.appendChild(typeCommand(document, field));
-            }
-        }
-        */
-        //tbody.appendChild(clickAndWaitCommand(document,
-        //        "//input[@id = 'proceed']"));
-        /*
-        // Add verifications for all other fields
-        for (final FieldMetadata field : fields) {
-            final JavaType fieldType = field.getFieldType();
-            if (!fieldType.isCommonCollectionType()
-                    && !isSpecialType(fieldType)) {
-                tbody.appendChild(verifyTextCommand(document, formBackingType,
-                        field));
-            }
-        }
-        */
-        /*
-        fileManager.createOrUpdateTextFileIfRequired(senchaTouchPath,
-                XmlUtils.nodeToString(document), false);
-        */
-        //manageTestSuite(relativeTestFilePath, name, serverURL);
-
 
     }
 
@@ -206,7 +151,6 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         final String finalFilePath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeFilePath);
-        System.out.println("relativeControllerTestFilePath : " + finalFilePath);
 
         fileManager.createOrUpdateTextFileIfRequired(finalFilePath,
                fileContent , false);
@@ -219,16 +163,11 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 && projectOperations.isFeatureInstalled(FeatureNames.MVC);
     }
 
-    public ArrayList<String> getAllValidEntities(final JavaType controller) { // Currently only one controller, later no arguments because all controllers.
+    public ArrayList<String> getAllValidEntities() {
 
         ArrayList<String> allEntityNames = new ArrayList<String>();
-        Validate.notNull(controller, "Controller type required");
 
-        /*Validate.notNull(
-                controllerTypeDetails,
-                "Class or interface type details for type '%s' could not be resolved",
-                controller);
-        */
+        System.out.println("Scaffolded Controllers found..");
         for (final JavaType type : typeLocationService
                 .findTypesWithAnnotation(ROO_WEB_SCAFFOLD)) {
             System.out.println(type.getFullyQualifiedTypeName());
@@ -248,14 +187,66 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 LOGGER.warning("The controller you specified does not allow the creation of new instances of the form backing object. No Sencha Touch code created.");
                 return null;
             }
+
             JavaType formBackingType = webScaffoldMetadata
                     .getAnnotationValues().getFormBackingObject();
+            getEntityMemberDetails(formBackingType);
+
             String entityName = formBackingType.getSimpleTypeName();
             allEntityNames.add(entityName);
 
         }
         return allEntityNames;
     }
+
+    private Map<String,String> getEntityMemberDetails(JavaType formBackingType){
+
+        HashMap<String,String> fieldMap = new HashMap<String, String>();
+
+        Validate.notNull(
+                formBackingType,
+                "Class or interface type details for type '%s' could not be resolved",
+                formBackingType);
+
+        final ClassOrInterfaceTypeDetails formBackingTypeDetails = typeLocationService
+                .getTypeDetails(formBackingType);
+        final MemberDetails memberDetails = memberDetailsScanner
+                .getMemberDetails(getClass().getName(), formBackingTypeDetails);
+
+        // Add composite PK identifier fields if needed
+
+        //     Getting all fields
+        for (final FieldMetadata field : persistenceMemberLocator
+                .getEmbeddedIdentifierFields(formBackingType)) {
+            final JavaType fieldType = field.getFieldType();
+            if (!fieldType.isCommonCollectionType()
+                    && !isSpecialType(fieldType)) {
+                final FieldMetadataBuilder fieldBuilder = new FieldMetadataBuilder(
+                        field);
+                final String fieldName = field.getFieldName().getSymbolName();
+                fieldBuilder.setFieldName(new JavaSymbolName(fieldName + "."
+                        + fieldName));
+                System.out.println("getEmbeddedIdentifierFields: " + fieldName);
+            }
+        }
+
+        // Add all other fields
+        final List<FieldMetadata> fields = webMetadataService
+                .getScaffoldEligibleFieldMetadata(formBackingType,
+                        memberDetails, null);
+        for (final FieldMetadata field : fields) {
+            final JavaType fieldType = field.getFieldType();
+            if (!fieldType.isCommonCollectionType()
+                    && !isSpecialType(fieldType)) {
+                System.out.println("Found field " + field.getFieldName().getSymbolName() + " for entity " + formBackingType.getSimpleTypeName());
+                fieldMap.put(field.getFieldName().getSymbolName(),java2JsMapping.get(field.getFieldType().getFullyQualifiedTypeName()));
+            }
+        }
+
+        return fieldMap;
+    }
+
+
 
     private boolean isSpecialType(final JavaType javaType) {
         return typeLocationService.isInProject(javaType);
