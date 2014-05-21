@@ -1,5 +1,7 @@
 package com.softrism.roo.addon.senchatouch.beans;
 
+import java.util.LinkedHashMap;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sudhir
@@ -10,6 +12,7 @@ package com.softrism.roo.addon.senchatouch.beans;
 public class EntityBean
 {
     private String name;
+    private LinkedHashMap<String,String> attrMap;
 
     public EntityBean()
     {
@@ -32,10 +35,14 @@ public class EntityBean
         return name.toLowerCase();
     }
 
+    public LinkedHashMap<String, String> getAttrMap() {
+        if(attrMap == null){
+            attrMap = new LinkedHashMap<String, String>();
+        }
+        return attrMap;
+    }
 
-
-
-    
-    
-
+    public void setAttrMap(LinkedHashMap<String, String> attrMap) {
+        this.attrMap = attrMap;
+    }
 }

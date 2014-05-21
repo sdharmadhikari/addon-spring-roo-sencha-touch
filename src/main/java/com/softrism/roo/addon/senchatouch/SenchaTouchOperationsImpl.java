@@ -90,6 +90,13 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
     private String JAVA2JS_MAPPING_FILE =  "java2js-mapping.properties";
 
     HashMap<String,String> java2JsMapping;
+
+    /*
+    Map code
+    #foreach( $key in $allProducts.keySet() )
+    <li>Key: $key -> Value: $allProducts.get($key)</li>
+#   end
+     */
     /**
      * Creates Sencha Touch code.
      * 
@@ -199,9 +206,9 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
         return allEntityNames;
     }
 
-    private Map<String,String> getEntityMemberDetails(JavaType formBackingType){
+    private LinkedHashMap<String,String> getEntityMemberDetails(JavaType formBackingType){
 
-        HashMap<String,String> fieldMap = new HashMap<String, String>();
+        LinkedHashMap<String,String> fieldMap = new LinkedHashMap<String, String>();
 
         Validate.notNull(
                 formBackingType,
