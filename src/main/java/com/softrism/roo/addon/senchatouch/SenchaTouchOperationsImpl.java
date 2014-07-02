@@ -86,22 +86,25 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     private String TEMPLATE_ROOT = "templates/";
     private String SENCHA_APP_BASE =  "phone/";
-    private String COMMON_TEMPLATEST_LIST = "common-templates.list";
+    private String COMMON_TEMPLATES_LIST = "common-templates.list";
     private String JAVA2JS_MAPPING_FILE =  "java2js-mapping.properties";
 
     HashMap<String,String> java2JsMapping;
 
     /*
     Map code
-    #foreach( $key in $allProducts.keySet() )
-    <li>Key: $key -> Value: $allProducts.get($key)</li>
-#   end
+    #foreach( $key in $entity.attrMap.keySet() )
+     {
+        name: '$key',
+        type: '$entity.attrMap.get($key)
+      },
+    #end
      */
+    //<li>Key: $key -> Value: $allProducts.get($key)</li>
     /**
      * Creates Sencha Touch code.
      * 
-     * @param controller the JavaType of the controller under test (required)
-     * @param name the name of the test case (optional)
+     * @param serverURL the JavaType of the controller under test (required)
      */
     public void generateSenchaTouchCode(String serverURL) {
 
@@ -122,9 +125,9 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         AppBean appBean = new AppBean("seleroo");
 
-        ArrayList<String> allEntities = getAllValidEntities();
+        ArrayList<EntityBean> allEntities = getAllValidEntities();
 
-        InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream(COMMON_TEMPLATEST_LIST);
+        InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream(COMMON_TEMPLATES_LIST);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String fileName;
@@ -133,10 +136,10 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
                 String templateFile = TEMPLATE_ROOT + fileName;
 
-                for(String entityName : allEntities) {
-                    EntityBean entityBean = new EntityBean( entityName);
+                for(EntityBean entityBean : allEntities) {
+
                     String parsedString = velocityEnabler.velocityExecute(templateFile, appBean, entityBean);
-                    createEntityJsFile(entityName, fileName, parsedString);
+                    createEntityJsFile(entityBean, fileName, parsedString);
                 }
 
             }
@@ -151,10 +154,10 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     }
 
-    public boolean createEntityJsFile(String entityName, String templateName, String fileContent ) {
+    public boolean createEntityJsFile(EntityBean entityBean, String templateName, String fileContent ) {
         String relativeFilePath = SENCHA_APP_BASE + templateName;
 
-        relativeFilePath = relativeFilePath.replaceAll("Entity", entityName);
+        relativeFilePath = relativeFilePath.replaceAll("Entity", entityBean.getName());
 
         final String finalFilePath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeFilePath);
@@ -170,9 +173,9 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 && projectOperations.isFeatureInstalled(FeatureNames.MVC);
     }
 
-    public ArrayList<String> getAllValidEntities() {
+    public ArrayList<EntityBean> getAllValidEntities() {
 
-        ArrayList<String> allEntityNames = new ArrayList<String>();
+        ArrayList<EntityBean> allEntities = new ArrayList<EntityBean>();
 
         System.out.println("Scaffolded Controllers found..");
         for (final JavaType type : typeLocationService
@@ -197,13 +200,14 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
             JavaType formBackingType = webScaffoldMetadata
                     .getAnnotationValues().getFormBackingObject();
-            getEntityMemberDetails(formBackingType);
 
-            String entityName = formBackingType.getSimpleTypeName();
-            allEntityNames.add(entityName);
+            EntityBean entityBean = new EntityBean(formBackingType.getSimpleTypeName());
+            entityBean.setAttrMap(getEntityMemberDetails(formBackingType));
+
+            allEntities.add(entityBean);
 
         }
-        return allEntityNames;
+        return allEntities;
     }
 
     private LinkedHashMap<String,String> getEntityMemberDetails(JavaType formBackingType){
