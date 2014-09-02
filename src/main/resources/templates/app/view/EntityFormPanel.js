@@ -30,39 +30,48 @@ Ext.define('${app.name}.view.${entity.name}FormPanel', {
                 xtype: 'fieldset',
                 itemId: 'attrNameFieldSetItemId',
                 items: [
+                    #foreach( $key in $entity.attrMap.keySet() )
                     {
                         xtype: 'textfield',
-                        label: 'attrName',
+                            label: '$key',
                         labelWidth: '40%',
-                        name: 'attrName'
-                    }
-                ]
-            },
-            {
-                xtype: 'fieldset',
-                itemId: '${entity.lowerCase}SaveFieldSetItemId',
-                items: [
+                        name: '$key'
+                    },
+                    #end
                     {
-                        xtype: 'button',
-                        itemId: '${entity.lowerCase}SaveButton',
-                        ui: 'action',
-                        iconCls: '',
-                        text: 'Save'
+                        xtype: 'textfield',
+                            hidden: true,
+                        label: 'alwaysHidden',
+                        labelWidth: '40%',
+                        name: 'alwaysHidden'
                     }
-                ]
-            },
-            {
-                xtype: 'fieldset',
-                itemId: '${entity.lowerCase}DeleteFieldSetItemId',
-                items: [
+                    ]
+                    },
                     {
-                        xtype: 'button',
-                        itemId: '${entity.lowerCase}DeleteButton',
-                        ui: 'decline',
-                        iconAlign: 'center',
-                        iconCls: 'delete'
-                    }
-                ]
+                        xtype: 'fieldset',
+                            itemId: '${entity.lowerCase}SaveFieldSetItemId',
+                        items: [
+                        {
+                            xtype: 'button',
+                            itemId: '${entity.lowerCase}SaveButton',
+                            ui: 'action',
+                            iconCls: '',
+                            text: 'Save'
+                        }
+                    ]
+                    },
+                    {
+                        xtype: 'fieldset',
+                            itemId: '${entity.lowerCase}DeleteFieldSetItemId',
+                        items: [
+                        {
+                            xtype: 'button',
+                            itemId: '${entity.lowerCase}DeleteButton',
+                            ui: 'decline',
+                            iconAlign: 'center',
+                            iconCls: 'delete'
+                        }
+                    ]
             }
         ]
     }
