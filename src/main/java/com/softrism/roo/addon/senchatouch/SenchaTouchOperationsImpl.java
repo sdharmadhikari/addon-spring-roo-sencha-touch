@@ -127,6 +127,8 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         ArrayList<EntityBean> allEntities = getAllValidEntities();
 
+        appBean.setEntityList(allEntities);
+
         InputStream is = SenchaTouchOperationsImpl.class.getClassLoader().getResourceAsStream(COMMON_TEMPLATES_LIST);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));

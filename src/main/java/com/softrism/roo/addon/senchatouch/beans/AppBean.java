@@ -1,5 +1,7 @@
 package com.softrism.roo.addon.senchatouch.beans;
 
+import java.util.ArrayList;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sudhir
@@ -11,6 +13,7 @@ public class AppBean
 {
     private String name;
     private String baseUrl;
+    private ArrayList<EntityBean> entityList;
 
     public AppBean()
     {
@@ -36,7 +39,12 @@ public class AppBean
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
-    
-    
 
+    public ArrayList<EntityBean> getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(ArrayList<EntityBean> entityList) {
+        this.entityList = entityList;
+    }
 }
