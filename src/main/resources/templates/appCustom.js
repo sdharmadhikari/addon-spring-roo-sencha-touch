@@ -25,21 +25,30 @@ Ext.application({
         'Ext.MessageBox'
     ],
     models: [
-        #foreach($entity in $entityList)
+        #foreach($entity in $app.entityList)
         '${entity.name}',
         #end
     ],
     stores: [
-        '${entity.name}JsonPStore'
+
+        #foreach($entity in $app.entityList)
+        '${entity.name}JsonPStore',
+        #end
     ],
     views: [
         'MainView',
+        #foreach($entity in $app.entityList)
         '${entity.name}NavigationView',
         '${entity.name}List',
-        '${entity.name}FormPanel'
+        '${entity.name}FormPanel',
+        #end
     ],
     controllers: [
-        '${entity.name}Controller'
+
+        #foreach($entity in $app.entityList)
+        '${entity.name}Controller',
+        #end
+
     ],
     name: '${app.name}',
 

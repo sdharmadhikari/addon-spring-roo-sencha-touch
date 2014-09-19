@@ -67,7 +67,6 @@ public class VelocityEnabler {
             InputStream is = VelocityEnabler.class.getClassLoader().getResourceAsStream( templateLocation );
             System.out.println("inputstream " + is);
             String inputString = IOUtils.toString(is, "UTF-8");
-
             velocityEngine.evaluate( velocityContext, writer, entityBean.getName() + "-log", inputString );
 
             return writer.toString();

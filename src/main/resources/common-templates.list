@@ -1,5 +1,5 @@
 index.html
-app.js
+appCustom.js
 app/controller/EntityController.js
 app/model/Entity.js
 app/store/EntityJsonPStore.js
