@@ -123,7 +123,8 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
         VelocityEnabler velocityEnabler = new VelocityEnabler();
 
-        AppBean appBean = new AppBean("seleroo");
+        String appName = projectOperations.getProjectName(projectOperations.getFocusedModuleName());
+        AppBean appBean = new AppBean(appName);
 
         ArrayList<EntityBean> allEntities = getAllValidEntities();
 
