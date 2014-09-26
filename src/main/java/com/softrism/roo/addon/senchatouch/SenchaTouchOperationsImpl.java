@@ -142,7 +142,7 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
                 for(EntityBean entityBean : allEntities) {
 
                     String parsedString = velocityEnabler.velocityExecute(templateFile, appBean, entityBean);
-                    createEntityJsFile(entityBean, fileName, parsedString);
+                    createJsFile(entityBean, fileName, parsedString);
                 }
 
             }
@@ -157,10 +157,12 @@ public class SenchaTouchOperationsImpl implements SenchaTouchOperations {
 
     }
 
-    public boolean createEntityJsFile(EntityBean entityBean, String templateName, String fileContent ) {
+    public boolean createJsFile(EntityBean entityBean, String templateName, String fileContent ) {
         String relativeFilePath = SENCHA_APP_BASE + templateName;
 
+        // Entity word should be replaced with real entity name. Custom is the custom template edited after script created template from SenchaCrud project.
         relativeFilePath = relativeFilePath.replaceAll("Entity", entityBean.getName());
+        relativeFilePath = relativeFilePath.replaceAll("Custom", "");
 
         final String finalFilePath = pathResolver.getFocusedIdentifier(
                 Path.SRC_MAIN_WEBAPP, relativeFilePath);

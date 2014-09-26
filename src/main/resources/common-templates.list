@@ -1,9 +1,9 @@
 index.html
 appCustom.js
 app/controller/EntityController.js
-app/model/Entity.js
+app/model/EntityCustom.js
 app/store/EntityJsonPStore.js
-app/view/EntityFormPanel.js
+app/view/EntityFormPanelCustom.js
 app/view/EntityList.js
 app/view/EntityNavigationView.js
 app/view/MainViewCustom.js
