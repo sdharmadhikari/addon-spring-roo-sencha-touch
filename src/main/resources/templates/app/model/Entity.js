@@ -30,12 +30,9 @@ Ext.define('${app.name}.model.${entity.name}', {
             }
         },
         fields: [
-            #foreach( $key in $entity.attrMap.keySet() )
             {
-                name: '$key',
-                    type: '$entity.attrMap.get($key)'
+                name: 'attrName'
             },
-            #end
             {
                 name: 'version'
             }
