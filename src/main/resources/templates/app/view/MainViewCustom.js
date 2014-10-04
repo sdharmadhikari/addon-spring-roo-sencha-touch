@@ -39,6 +39,19 @@ Ext.define('${app.name}.view.MainView', {
                 ]
             },
             #end
+            {
+                hidden : true,
+                xtype: 'container',
+                title: '${entity.name}s',
+                iconCls: 'info',
+                itemId: 'hiddenEntityItemId',
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'hiddenEntityNavigationView'
+                    }
+                ]
+            }
         ],
         tabBar: {
             docked: 'bottom',
