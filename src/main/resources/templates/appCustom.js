@@ -26,8 +26,9 @@ Ext.application({
     ],
     models: [
         #foreach($entity in $app.entityList)
-        '${entity.name}',
-        #end
+        '${entity.name}'#if( $velocityHasNext ),
+#end
+    #end
     ],
     stores: [
 
