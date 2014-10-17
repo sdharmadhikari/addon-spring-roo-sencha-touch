@@ -31,24 +31,24 @@ Ext.application({
 
     ],
     stores: [
+#foreach($entity in $app.entityList)
+        '${entity.name}JsonPStore'#if( $velocityHasNext ),
+#end#end
 
-        #foreach($entity in $app.entityList)
-        '${entity.name}JsonPStore',
-        #end
     ],
     views: [
         'MainView',
-        #foreach($entity in $app.entityList)
+#foreach($entity in $app.entityList)
         '${entity.name}NavigationView',
         '${entity.name}List',
-        '${entity.name}FormPanel',
-        #end
+        '${entity.name}FormPanel'#if( $velocityHasNext ),
+#end#end
+
     ],
     controllers: [
-
-        #foreach($entity in $app.entityList)
-        '${entity.name}Controller',
-        #end
+#foreach($entity in $app.entityList)
+        '${entity.name}Controller'#if( $velocityHasNext ),
+#end#end
 
     ],
     name: '${app.name}',
