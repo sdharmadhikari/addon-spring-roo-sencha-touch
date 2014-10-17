@@ -25,10 +25,10 @@ Ext.application({
         'Ext.MessageBox'
     ],
     models: [
-        #foreach($entity in $app.entityList)
+#foreach($entity in $app.entityList)
         '${entity.name}'#if( $velocityHasNext ),
-#end
-    #end
+#end#end
+
     ],
     stores: [
 
