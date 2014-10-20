@@ -25,7 +25,7 @@ Ext.define('${app.name}.view.MainView', {
     config: {
         itemId: 'mainView',
         items: [
-            #foreach($entity in $app.entityList)
+#foreach($entity in $app.entityList)
             {
                 xtype: 'container',
                 title: '${entity.name}s',
@@ -37,21 +37,9 @@ Ext.define('${app.name}.view.MainView', {
                         xtype: '${entity.lowerCase}NavigationView'
                     }
                 ]
-            },
-            #end
-            {
-                hidden : true,
-                xtype: 'container',
-                title: '${entity.name}s',
-                iconCls: 'info',
-                itemId: 'hiddenEntityItemId',
-                layout: 'fit',
-                items: [
-                    {
-                        xtype: 'hiddenEntityNavigationView'
-                    }
-                ]
-            }
+            }#if( $velocityHasNext ),
+#end#end
+
         ],
         tabBar: {
             docked: 'bottom',
