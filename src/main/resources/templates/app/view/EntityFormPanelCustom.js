@@ -26,8 +26,8 @@ Ext.define('${app.name}.view.${entity.name}FormPanel', {
     config: {
         itemId: '${entity.lowerCase}FormPanel',
         items: [
+#foreach( $key in $entity.attrMap.keySet() )
             {
-            #foreach( $key in $entity.attrMap.keySet() )
                 xtype: 'fieldset',
                 itemId: '${key}FieldSetItemId',
                 items: [
@@ -36,23 +36,10 @@ Ext.define('${app.name}.view.${entity.name}FormPanel', {
                         label: '$key',
                         labelWidth: '40%',
                         name: '$key'
-                 },
-             #end
-            {
-                hidden : true,
-                xtype: 'fieldset',
-                itemId: 'attrNameFieldSetItemId',
-                items: [
-                        {
-                            xtype: 'textfield',
-                            label: 'attrName',
-                            labelWidth: '40%',
-                            name: 'attrName'
-                        }
+                 }
                 ]
-            }
-                ]
-            },
+            }#if( $velocityHasNext ),
+#end#end
             {
                 xtype: 'fieldset',
                 itemId: '${entity.lowerCase}SaveFieldSetItemId',
