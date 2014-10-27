@@ -26,7 +26,7 @@ Ext.define('${app.name}.view.${entity.name}List', {
         store: '${entity.name}JsonPStore',
         onItemDisclosure: true,
         itemTpl: [
-            '<div>attrName {attrName}</div>'
+            '<div>{[values[Object.keys(values)[0]]]}</div>'
         ]
     }
 
