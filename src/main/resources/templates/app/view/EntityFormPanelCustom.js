@@ -38,8 +38,8 @@ Ext.define('${app.name}.view.${entity.name}FormPanel', {
                         name: '$key'
                  }
                 ]
-            }#if( $velocityHasNext ),
-#end#end
+            },
+#end
             {
                 xtype: 'fieldset',
                 itemId: '${entity.lowerCase}SaveFieldSetItemId',
