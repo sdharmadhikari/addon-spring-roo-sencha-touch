@@ -32,7 +32,9 @@ Ext.define('${app.name}.controller.${entity.name}Controller', {
                 autoCreate: true,
                 selector: 'list#${entity.lowerCase}List',
                 xtype: '${entity.lowerCase}List'
-            }
+            },
+            ${entity.lowerCase}RefreshButton: 'button#${entity.lowerCase}RefreshButton',
+            ${entity.lowerCase}AddButton: 'button#${entity.lowerCase}AddButton'
         },
 
         control: {
@@ -50,6 +52,9 @@ Ext.define('${app.name}.controller.${entity.name}Controller', {
             },
             "button#${entity.lowerCase}DeleteButton": {
                 tap: 'on${entity.name}DeleteButtonTap'
+            },
+            "navigationview#${entity.lowerCase}NavigationView": {
+                activeitemchange: 'on${entity.name}NavigationViewActiveItemChange'
             }
         }
     },
@@ -146,6 +151,24 @@ Ext.define('${app.name}.controller.${entity.name}Controller', {
             }
         });
 
+
+    },
+
+    on${entity.name}NavigationViewActiveItemChange: function(container, value, oldValue, eOpts) {
+
+
+        if(value.xtype == '${entity.lowerCase}List') {
+
+           this.get${entity.name}RefreshButton().show();
+           this.get${entity.name}AddButton().show();
+
+        }
+        if(value.xtype == '${entity.lowerCase}FormPanel') {
+
+            this.get${entity.name}RefreshButton().hide();
+            this.get${entity.name}AddButton().hide();
+
+        }
 
     }
 
