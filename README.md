@@ -13,3 +13,15 @@ Once the scaffolded application is generated, developer can modifiyt code furthe
 
 The supporting, Sencha Touch Reference project is at https://github.com/sdharmadhikari/roo-addon-reference-sencha-project.
 Sencha Touch code from this project will be used as code templates for this main project.
+
+How To Install Addon :
+
+Since generated addon is not yet part of Spring Roo's official repository, it needs to be installed manually into Spring Roo. This addon has dependency on following 3 osgi bundles which need to be installed first into Spring Roo container. 
+
+Apache Commons Lang (2.4.0)
+Apache Commons Collections (3.2.1)
+Apache Velocity Engine (1.6.2)
+
+You can find all 3 bundles in "lib" directory at this location.
+
+osgi start --url file:///Users/sudhir/Projects/trials/spring-roo/addon-roo-sencha/target/com.softrism.roo.senchaaddon-1.0.jar
