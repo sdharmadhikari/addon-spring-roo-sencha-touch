@@ -24,6 +24,7 @@ Ext.define('${app.name}.store.${entity.name}JsonPStore', {
 
     config: {
         autoLoad: true,
+        autoSync: true,
         model: '${app.name}.model.${entity.name}',
         storeId: '${entity.name}JsonPStore',
         proxy: {
